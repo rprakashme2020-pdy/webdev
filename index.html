@@ -56,11 +56,24 @@
       <div class="scroll-cue"><span>SCROLL TO MOVE</span><i></i></div>
     </section>
 
-    <aside class="offer" aria-label="Special website offer">
-      <span>LIMITED OFFER · 28 / 29 / 30 SEPTEMBER 2026</span>
-      <strong>BUSINESS WEBSITE LIVE IN 2 DAYS — STARTING ₹999</strong>
-      <a class="track" data-event="start_project_click" data-location="offer" href="#package">VIEW PACKAGE ↘</a>
-    </aside>
+    <section class="scratch-offer" id="scratch-offer" aria-labelledby="scratch-title">
+      <div class="scratch-intro">
+        <p class="eyebrow">[ A SURPRISE FOR YOUR BUSINESS ]</p>
+        <h2 id="scratch-title">SCRATCH TO<br>REVEAL YOUR OFFER.</h2>
+        <p>Use your finger or mouse. Scratch at least 55% to unlock it.</p>
+      </div>
+      <div class="scratch-card" data-cursor="DRAG">
+        <div class="scratch-prize" aria-live="polite">
+          <span>YOU UNLOCKED</span><strong>₹999</strong>
+          <h3>BUSINESS WEBSITE<br>LIVE IN 2 DAYS</h3>
+          <p>Only for 28, 29 &amp; 30 September 2026</p>
+          <a class="scratch-claim track magnetic" data-event="offer_claim_click" data-location="scratch_card" href="https://wa.me/917397559527?text=Hi%20Prakash%2C%20I%20scratched%20and%20unlocked%20the%20%E2%82%B9999%20website%20offer.%20I%20want%20to%20claim%20it." target="_blank" rel="noopener">CLAIM ON WHATSAPP ↗</a>
+        </div>
+        <canvas id="scratch-canvas" aria-label="Scratch here to reveal the ₹999 website offer"></canvas>
+        <div class="scratch-hint" aria-hidden="true"><i>↔</i><span>SCRATCH HERE</span></div>
+      </div>
+      <button class="scratch-access" type="button">REVEAL OFFER WITHOUT SCRATCHING</button>
+    </section>
 
     <section class="manifesto">
       <p class="eyebrow reveal">[ THE IDEA ]</p>
