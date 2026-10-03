@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { contact } from '@/lib/config';
 import './globals.css';
+import { Navigation, ConversionBars } from '@/components/interactive';
+import { Footer } from '@/components/site';
 export const metadata: Metadata = {
  metadataBase: new URL(contact.website),
  title: 'Digital Admission Growth & AI for Schools | Prakash Ravikumar',
@@ -13,5 +15,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {width:'device-width',initialScale:1,themeColor:'#f7f8f2'};
 export default function RootLayout({children}:{children:React.ReactNode}) {
  const schema = {'@context':'https://schema.org','@type':'ProfessionalService',name:contact.name,url:contact.website,telephone:contact.phone,description:'Digital admission growth and AI services for schools and preschools.',areaServed:[{'@type':'City',name:'Puducherry'},{'@type':'City',name:'Chennai'}],serviceType:['School website development','Local SEO','School social media marketing','Admission CRM','School WhatsApp automation','AI for schools']};
- return <html lang="en"><body><a href="#main" className="skip-link">Skip to content</a><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema)}}/>{children}</body></html>;
+ return <html lang="en"><body><a href="#main" className="skip-link">Skip to content</a><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema)}}/><Navigation/><main id="main">{children}</main><Footer/><ConversionBars/></body></html>;
 }

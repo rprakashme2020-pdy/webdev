@@ -21,3 +21,6 @@ Every conversion pushes `whatsapp_click`, `call_click`, `audit_click` or `ai_int
 The AI conversation, CRM records and school comparison are explicitly fictional demonstrations. AI and CRM are service previews, not connected school systems. No testimonials, school client logos, partnerships or admission guarantees are claimed. The 14+ year experience statement was confirmed by Prakash.
 
 The existing jobs page is preserved at `/jobs.html` and linked in the footer. The previous laptop website remains in the repository's historical static files for reference; the exported Next homepage is served in production.
+
+## Focused pages
+Home now provides a shorter overview. Service details live at `/school-digital-marketing/`, `/school-websites/`, `/school-ai-automation/`, and `/free-school-audit/`. Shared navigation, footer and conversion bars are in the root layout. Each page has unique metadata and canonical URLs. AI and CRM previews are explicitly demos; implementations are custom scoped services.

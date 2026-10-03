@@ -15,3 +15,6 @@
 - Page is statically generated, uses a 32KB WebP portrait and no external fonts or marketing scripts. Field Core Web Vitals require real visitor measurements after launch.
 
 AI, CRM and competitor examples are demonstrations. No school case studies or guaranteed admission claims were added. Analytics reporting needs an analytics provider connected to the event hooks.
+
+## Multi-page rebuild verification
+Production build and TypeScript compilation passed; ESLint passed. Browser checks covered all five routes at 320, 390, 768 and 1440px with no horizontal overflow. Automated WCAG A/AA checks reported no violations on all pages. Mobile navigation, admission checker, FAQ, CRM filter, scripted AI demo, Call/WhatsApp hrefs, CTA analytics events, reduced motion and legacy jobs route passed. Automated checks do not replace a complete manual accessibility audit.

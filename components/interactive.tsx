@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { auditMessage, aiMessage, callHref, whatsappHref } from '@/lib/config';
 
 type EventName = 'whatsapp_click' | 'call_click' | 'audit_click' | 'ai_interest_click';
@@ -15,7 +17,9 @@ export function CTA({ children, kind = 'audit', location, secondary = false, mes
 }
 export function Navigation() {
   const [open, setOpen] = useState(false);
-  return <header className="header"><div className="nav-wrap"><a className="brand" href="#top" aria-label="Prakash Ravikumar home"><span className="brand-mark">pr<span>.</span></span><span>PRAKASH RAVIKUMAR<small>School Admission Engine + AI</small></span></a><button className="menu-toggle" aria-expanded={open} aria-controls="main-navigation" onClick={()=>setOpen(!open)}>{open ? 'Close' : 'Menu'}</button><nav id="main-navigation" className={open ? 'nav open' : 'nav'} aria-label="Main navigation"><a onClick={()=>setOpen(false)} href="#engine">The system</a><a onClick={()=>setOpen(false)} href="#ai">AI for schools</a><a onClick={()=>setOpen(false)} href="#about">About</a><CTA location="navigation">Free school audit</CTA></nav></div></header>;
+  const pathname = usePathname().replace(/\/$/, '') || '/';
+  const links = [['/','Home'],['/school-digital-marketing','Digital Marketing'],['/school-websites','Websites'],['/school-ai-automation','CRM & AI'],['/free-school-audit','Free Audit']];
+  return <header className="header"><div className="nav-wrap"><Link className="brand" href="/" aria-label="Prakash Ravikumar home" onClick={()=>setOpen(false)}><span className="brand-mark">pr<span>.</span></span><span>PRAKASH RAVIKUMAR<small>School Admission Engine + AI</small></span></Link><button className="menu-toggle" aria-expanded={open} aria-controls="main-navigation" onClick={()=>setOpen(!open)}>{open ? 'Close' : 'Menu'}</button><nav id="main-navigation" className={open ? 'nav open' : 'nav'} aria-label="Main navigation">{links.map(([href,label])=><Link key={href} href={href} aria-current={pathname===href ? 'page' : undefined} onClick={()=>setOpen(false)}>{label}</Link>)}<CTA location="navigation">WhatsApp Prakash</CTA></nav></div></header>;
 }
 const questions = ['Can parents easily find your school on Google?', 'Does your website make it easy to WhatsApp or call?', 'Does your website clearly explain why parents should choose your school?', 'Is your Instagram regularly active?', 'Do you create useful Reels/videos?', 'Do you have strong genuine Google reviews?', 'Can parents book a school visit easily?', 'Do you know where every admission enquiry came from?', 'Does your team follow up every enquiry?', 'Can you see which parents need follow-up today?'];
 export function AdmissionCheck() {
