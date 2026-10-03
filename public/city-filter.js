@@ -1,0 +1,10 @@
+(() => {
+  const style=document.createElement('style');
+  style.textContent='.city-tabs{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--ink);margin:0 0 12px}.city-tabs button{min-height:62px;border:0;border-right:1px solid var(--ink);background:transparent;color:var(--ink);font:600 11px DM Mono,monospace;letter-spacing:.06em;cursor:pointer}.city-tabs button:last-child{border-right:0}.city-tabs button span{display:inline-grid;place-items:center;min-width:24px;height:24px;margin-left:7px;border:1px solid currentColor;border-radius:50%;font-size:8px}.city-tabs button.active{background:var(--ink);color:#fff}.city-tabs button:focus-visible{outline:3px solid var(--coral);outline-offset:3px}.city-status{margin:0 0 30px;font:500 10px DM Mono,monospace;color:#666}.job-grid article[hidden]{display:none}@media(max-width:700px){.city-tabs{grid-template-columns:1fr}.city-tabs button{border-right:0;border-bottom:1px solid var(--ink)}.city-tabs button:last-child{border-bottom:0}}';
+  document.head.appendChild(style);
+  const cards=[...document.querySelectorAll('.job-grid article')],buttons=[...document.querySelectorAll('[data-city-filter]')],status=document.querySelector('.city-status');
+  cards.forEach(card=>{if(!card.dataset.city)card.dataset.city='pondicherry'});
+  function show(city){let count=0;cards.forEach(card=>{const visible=city==='all'||card.dataset.city===city;card.hidden=!visible;if(visible)count++});buttons.forEach(button=>{const active=button.dataset.cityFilter===city;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active))});const label=city==='all'?'Chennai and Pondicherry':city[0].toUpperCase()+city.slice(1);status.textContent=`Showing ${count} ${label} jobs`;history.replaceState(null,'',city==='pondicherry'?'jobs.html':`jobs.html?city=${city}`)}
+  buttons.forEach(button=>button.addEventListener('click',()=>show(button.dataset.cityFilter)));
+  const requested=new URLSearchParams(location.search).get('city');show(['chennai','pondicherry','all'].includes(requested)?requested:'pondicherry');
+})();
