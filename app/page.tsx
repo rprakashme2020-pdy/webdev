@@ -25,7 +25,6 @@ const aiCards = [
 const content = ['A Day at Our Preschool','Meet Our Teachers','Classroom Activities','Learning Through Play','Parent Testimonials','Campus Tour','School Celebrations','Parenting Tips','Admission FAQs','Why Parents Choose Us','Student Activities','Admission Campaigns'];
 const fixes = [ ['Website but few enquiries?','Website conversion optimisation'],['Instagram inactive?','Social media + Reels'],['Need more local enquiries?','Meta Ads + local campaigns'],['Poor Google visibility?','Local SEO'],['Enquiries getting forgotten?','Admission CRM'],['Slow responses?','WhatsApp + automation'],['Too much repetitive work?','AI automation'],["No idea what’s working?",'Analytics + reporting'] ];
 const faqs = [
- ['Can digital marketing guarantee admissions?','No. Admissions depend on factors including location, fees, school quality, facilities, parent experience and follow-up. Digital marketing can help improve discovery, trust, enquiries and admission opportunities.'],
  ['Do I need a new website?','Not necessarily. If your existing website is good, we can improve its enquiry and conversion journey rather than rebuild it.'],
  ['Can you manage Instagram and Facebook?','Yes, including strategy, content ideas, creatives, Reels and admission-focused campaigns, depending on the engagement we agree on.'],
  ['Can you run Meta Ads?','Yes. Campaigns can focus on reaching relevant local audiences and generating enquiries or school visits. Advertising spend and campaign scope are agreed separately.'],
