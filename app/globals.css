@@ -18,3 +18,5 @@
 .hero-image-wrap img{height:auto;aspect-ratio:3/2;object-fit:contain}
 
 .hero-image-wrap.engine-image-wrap img{height:auto;aspect-ratio:520/430;object-fit:contain}
+
+.hero h1 .local-headline{background:none;color:var(--ink)}.local-area-line{font-size:.86rem;line-height:1.65;max-width:540px;padding-left:14px;border-left:3px solid #a8c477;margin-top:22px}.local-area-line strong{color:var(--ink);font-weight:600}.hero-copy>.eyebrow{line-height:1.7;max-width:540px}@media(max-width:500px){.hero h1{font-size:2.6rem}.local-area-line{font-size:.8rem;margin-top:18px}.hero-copy>.eyebrow{font-size:.66rem}}
