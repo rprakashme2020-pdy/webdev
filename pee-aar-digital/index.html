@@ -135,6 +135,40 @@
   @media(max-width:760px){.portfolio-grid.real-portfolio{grid-template-columns:1fr;gap:27px}.real-project .real-project-img{aspect-ratio:1.54}.capture-chrome{height:28px}.real-project .live-screenshot{top:28px;height:calc(100% - 28px)}.capture-fallback{top:28px}.real-project .project-name{font-size:18px}.portfolio-note{font-size:12px}}
   @media(prefers-reduced-motion:reduce){.real-project .live-screenshot{transition:none}}
 
+
+/* UNIFIED EXPERIENCE: one scene per step, not repeated text + illustration sections */
+.ic-story{min-width:0}
+.ic-setup,.ic-narrative,.ic-reflection{min-width:0}
+.ic-reflection{margin-top:auto}
+.ic-story h3{min-height:0;margin-bottom:14px}
+.ic-story-copy{min-height:0;max-width:440px}
+.ic-moral{font-size:14px;line-height:1.55;background:#ffffff0b;border-left:3px solid #9ca89c}
+.ic-show:before{content:'LOOK THROUGH YOUR CUSTOMER’S EYES'}
+.ic-neutral{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:17px;border:1px solid #bdc5b9;background:#e9ede7;padding:19px 10px 15px;text-align:center;color:#333e33;gap:7px}
+.ic-neutral-icon{display:flex;align-items:center;justify-content:center;border:1px solid #626d60;border-radius:50%;width:26px;height:26px;font-size:16px;font-weight:800}
+.ic-neutral strong{font-size:11px}.ic-neutral small{font-size:9px;line-height:1.45;color:#5c665b}
+@media(max-width:760px){
+  .ic-main{display:flex;flex-direction:column;min-height:0}
+  .ic-story{display:contents}
+  .ic-setup{order:1;padding:26px var(--gutter) 9px}
+  .ic-segments{margin-bottom:22px}
+  .ic-progress{margin-bottom:0}
+  .ic-narrative{order:2;padding:14px var(--gutter) 20px}
+  .ic-narrative .ic-label{margin-bottom:12px}
+  .ic-narrative h3{font-size:clamp(29px,7.2vw,39px);letter-spacing:-.06em;line-height:1.15;margin:0 0 10px}
+  .ic-narrative .ic-story-copy{font-size:13px;line-height:1.5;margin:0;color:#b9c2b8}
+  .ic-show{order:3;min-height:0;padding:42px var(--gutter) 38px;border-top:1px solid #333832;border-bottom:1px solid #333832;background:radial-gradient(circle at 50% 50%,#363d36 0%,#252a25 54%,#1a1e1a 100%)}
+  .ic-show:before{top:15px;left:var(--gutter);font-size:9px}
+  .ic-show:after{bottom:9px;font-size:8px}
+  .ic-phone{width:212px;height:426px;transform:rotate(-2deg)}
+  .ic-explainer{margin-top:14px;font-size:10px;max-width:300px}
+  .ic-reflection{order:4;margin-top:0;padding:22px var(--gutter) 29px;display:flex;flex-direction:column;gap:0}
+  .ic-reflection .ic-moral{max-width:none;padding:15px 17px;font-size:13px}
+  .ic-choice{padding:18px 0 0;max-width:none}
+  .ic-controls{padding-top:20px}
+  .ic-ctrl{min-height:53px}
+}
+@media(max-width:390px){.ic-phone{height:418px;width:208px}}
 </style>
 </head>
 <body>
@@ -185,11 +219,11 @@
           <div class="ic-eyebrow"><span class="ic-dot" aria-hidden="true"></span> SEE WHERE YOU MAY BE LOSING CUSTOMERS <span aria-hidden="true">/ 001</span></div>
           <h2 class="ic-title" id="ic-title">How are you<br><em>losing your customers?</em></h2>
         </div>
-        <div class="ic-intro-right"><p>Your website may look good. But are visitors contacting you? Take this quick journey to see why customers might leave without enquiring.</p><small>4 simple steps · About 1 minute · No sign-up</small></div>
+        <div class="ic-intro-right"><p>See what a customer experiences before deciding whether to contact your business.</p><small>4 scenes · About 1 minute · No sign-up</small></div>
       </div>
       <div class="ic-main">
-        <div class="ic-story">
-          <div class="ic-picker-label">FIRST, CHOOSE YOUR BUSINESS</div>
+  <div class="ic-story">
+    <div class="ic-setup"><div class="ic-picker-label">FIRST, CHOOSE YOUR BUSINESS</div>
           <div class="ic-segments" role="group" aria-label="Choose an example business type">
             <button class="ic-segment" type="button" data-sector="preschool" aria-pressed="true">Preschool</button>
             <button class="ic-segment" type="button" data-sector="shop" aria-pressed="false">Local shop</button>
@@ -200,11 +234,11 @@
             <button data-step="1" type="button">02 / VISIT</button>
             <button data-step="2" type="button">03 / LEAVE</button>
             <button data-step="3" type="button">04 / FIX</button>
-          </div>
-          <div class="ic-label" id="ic-scene-label">STEP 01 / SEARCH</div>
-          <h3 id="ic-scene-title" aria-live="polite">A customer is looking for your business.</h3>
-          <p class="ic-story-copy" id="ic-scene-copy">They search online for a preschool like yours. Will your school appear when they look?</p>
-          <div class="ic-moral" id="ic-scene-insight">Will they find you?</div>
+          </div></div>
+    <div class="ic-narrative"><div class="ic-label" id="ic-scene-label">STEP 01 / SEARCH</div>
+          <h3 id="ic-scene-title" aria-live="polite">Will customers find you?</h3>
+          <p class="ic-story-copy" id="ic-scene-copy">A parent searches online for a preschool nearby.</p></div>
+    <div class="ic-reflection"><div class="ic-moral" id="ic-scene-insight">If parents don’t discover your school, they may never reach your website.</div>
           <div class="ic-choice" id="ic-choice" hidden>
             <p class="ic-choice-question" id="ic-choice-question">Does your website have what it takes to turn visitors into enquiries?</p>
             <div class="ic-choice-buttons" role="group" aria-label="Assess whether your website convinces visitors to enquire">
@@ -221,9 +255,9 @@
               <button type="button" class="btn" data-audit>Review Your Website for Free <span aria-hidden="true">↗</span></button>
               <button class="ic-replay" id="ic-replay" type="button">↺ Replay experience</button>
             </div>
-          </div>
-        </div>
-        <div class="ic-show" aria-label="Illustrated phone showing a fictional customer journey">
+          </div></div>
+  </div>
+  <div class="ic-show" aria-label="Illustrated phone showing a fictional customer journey">
           <div class="ic-orbit" aria-hidden="true"></div>
           <div class="ic-phone" aria-hidden="true">
             <div class="ic-phone-notch"></div>
@@ -241,7 +275,7 @@
                 <div class="ic-site-banner"></div>
                 <div class="ic-site-title" id="ic-visit-title">Welcome to our preschool</div>
                 <div class="ic-copy-lines"></div><div class="ic-copy-lines middle"></div><div class="ic-copy-lines short"></div>
-                <div class="ic-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v7m0 4v1"/></svg><strong>Questions remain unanswered</strong><small id="ic-missing">Fees? Timings? How to enquire?</small></div>
+                <div class="ic-neutral"><span class="ic-neutral-icon" aria-hidden="true">?</span><strong>The first impression</strong><small id="ic-missing">Will they want to enquire?</small></div>
               </div>
               <div class="ic-ui" data-phone-scene="2">
                 <div class="ic-ui-label">THE EXIT / LOST MOMENT</div>
@@ -365,37 +399,37 @@
   (() => {
     const journeys = {
       preschool: {
-        query:'preschools near me', result:'Nearby preschool', visit:'Welcome to our preschool', missing:'Fees? Safety? Admissions?', fix:'A preschool parents can trust.', benefit:'Clear admissions information', action:'Ask about admissions ↗',
-        titles:['A customer is looking for your business.','Visitors found your website. Will they become your customers?','You just lost a possible customer.','Don’t let your next customer leave.'],
+        query:'preschools near me', result:'Nearby preschool', visit:'Welcome to our preschool', missing:'Would you enquire about admissions?', fix:'A preschool parents can trust.', benefit:'Clear admissions information', action:'Ask about admissions ↗',
+        titles:['Will customers find you?','They found you. Will they enquire?','What if they leave without enquiring?','Make the next visit count.'],
         copies:[
-          'A parent searches online for a preschool nearby. Your school might be one of the choices they find.',
-          'Getting parents to visit your website is only the first step. Does it build trust, answer their questions and encourage them to enquire?',
-          'They may leave and look at another school because they cannot find what they need.',
-          'Show what makes your preschool special. Answer common questions and make enquiries easy.'
+          'A parent searches online for a preschool nearby.',
+          'A parent opens your website and forms a first impression.',
+          'The parent may close the page and compare another school.',
+          'A clear message, genuine trust signals and an easy enquiry path can help.'
         ],
-        insights:['Will they find you?','Think about the full customer experience—not just the information on the page.','They leave without enquiring.','Make it easy for parents to contact you.']
+        insights:['If parents don’t discover your school, they may never reach your website.','First impressions can decide whether parents keep exploring or leave.','A visit without an enquiry could be a missed admission opportunity.','Wondering what your school website could improve?']
       },
       shop: {
-        query:'shops near me', result:'Nearby local shop', visit:'Welcome to our shop', missing:'Hours? Products? Directions?', fix:'Your neighbourhood favourite.', benefit:'Products, timings and directions', action:'Ask about a product ↗',
-        titles:['A customer is looking for your business.','Visitors found your website. Will they become your customers?','You just lost a possible customer.','Don’t let your next customer leave.'],
+        query:'shops near me', result:'Nearby local shop', visit:'Welcome to our shop', missing:'Would you ask about a product?', fix:'Your neighbourhood favourite.', benefit:'Products, timings and directions', action:'Ask about a product ↗',
+        titles:['Will customers find you?','They found you. Will they enquire?','What if they leave without enquiring?','Make the next visit count.'],
         copies:[
-          'Someone needs a product and searches online for a shop nearby. Will your shop show up?',
-          'Getting shoppers to visit your website is only the first step. Does it build trust, answer their questions and encourage them to enquire?',
-          'Instead of calling you, they may choose another shop with clearer information.',
-          'Show your products, hours, location and contact number so customers can reach you quickly.'
+          'Someone searches online for a shop nearby.',
+          'A shopper opens your website and forms a first impression.',
+          'The shopper may close the page and compare another store.',
+          'A clear message, genuine trust signals and an easy enquiry path can help.'
         ],
-        insights:['Will they find you?','Think about the full customer experience—not just the information on the page.','They leave without enquiring.','Make it easy for shoppers to contact you.']
+        insights:['If shoppers don’t discover your store, they may choose another one.','First impressions can decide whether shoppers keep exploring or leave.','A visit without an enquiry could be a missed sale.','Wondering what your shop website could improve?']
       },
       service: {
-        query:'services near me', result:'Nearby service provider', visit:'Professional services for you', missing:'Services? Reviews? Contact?', fix:'Helpful expertise. Clear next steps.', benefit:'Services and real work examples', action:'Ask for a consultation ↗',
-        titles:['A customer is looking for your business.','Visitors found your website. Will they become your customers?','You just lost a possible customer.','Don’t let your next customer leave.'],
+        query:'services near me', result:'Nearby service provider', visit:'Professional services for you', missing:'Would you request a quote?', fix:'Helpful expertise. Clear next steps.', benefit:'Services and real work examples', action:'Ask for a consultation ↗',
+        titles:['Will customers find you?','They found you. Will they enquire?','What if they leave without enquiring?','Make the next visit count.'],
         copies:[
-          'Someone needs help and searches online for a service like yours. Will your business appear?',
-          'Getting visitors to your website is only the first step. Does it build trust, answer their questions and encourage them to enquire?',
-          'They may leave your page and contact a different service provider instead.',
-          'Explain what you do, show genuine work, answer questions and make contacting you simple.'
+          'Someone searches for a service provider nearby.',
+          'A potential customer opens your website and forms a first impression.',
+          'The visitor may close the page and compare another provider.',
+          'A clear message, genuine trust signals and an easy enquiry path can help.'
         ],
-        insights:['Will they find you?','Think about the full customer experience—not just the information on the page.','They leave without enquiring.','Make it easy for people to contact you.']
+        insights:['If people don’t find your business, they may choose another provider.','First impressions can decide whether visitors keep exploring or leave.','A visit without an enquiry could be a missed opportunity.','Wondering what your website could improve?']
       }
     };
     const labels=['STEP 01 / SEARCH','STEP 02 / VISIT','STEP 03 / LEAVE','STEP 04 / FIX'];
@@ -405,9 +439,9 @@
     const steps=[...document.querySelectorAll('[data-step]')];
     const scenes=[...document.querySelectorAll('[data-phone-scene]')];
     const decisions={
-      preschool:{question:'Does your website have what it takes to turn parents into admission enquiries?',good:'If parents can understand your school, trust what they see and enquire easily, that’s a great start. You can finish here, or request a free review to find more opportunities.',risk:'You may be missing parent enquiries if your website does not give families enough confidence or a clear reason to contact you. See how that can happen.'},
-      shop:{question:'Does your website have what it takes to turn shoppers into enquiries?',good:'If shoppers can understand your products, trust your shop and contact you easily, that’s a great start. You can finish here, or request a free review to find more opportunities.',risk:'You may be missing enquiries if your website does not give shoppers enough confidence or a clear reason to contact you. See how that can happen.'},
-      service:{question:'Does your website have what it takes to turn visitors into enquiries?',good:'If visitors understand your services, trust your expertise and can contact you easily, that’s a great start. You can finish here, or request a free review to find more opportunities.',risk:'You may be missing enquiries if your website does not give visitors enough confidence or a clear reason to contact you. See how that can happen.'}
+      preschool:{question:'Would a first-time parent feel confident enough to enquire?',good:'If parents can understand your school, trust what they see and enquire easily, that’s a great start. You can finish here, or request a free review to find more opportunities.',risk:'You may be missing parent enquiries if your website does not give families enough confidence or a clear reason to contact you. See how that can happen.'},
+      shop:{question:'Would a first-time shopper feel confident enough to enquire?',good:'If shoppers can understand your products, trust your shop and contact you easily, that’s a great start. You can finish here, or request a free review to find more opportunities.',risk:'You may be missing enquiries if your website does not give shoppers enough confidence or a clear reason to contact you. See how that can happen.'},
+      service:{question:'Would a first-time visitor feel confident enough to enquire?',good:'If visitors understand your services, trust your expertise and can contact you easily, that’s a great start. You can finish here, or request a free review to find more opportunities.',risk:'You may be missing enquiries if your website does not give visitors enough confidence or a clear reason to contact you. See how that can happen.'}
     };
     function selectDecision(value){decision=value;render();}
     function render(){
@@ -429,7 +463,7 @@
       $('ic-prev').hidden=step===0;
       $('ic-next').hidden=step===3;
       $('ic-finish').hidden=step!==3;
-      $('ic-next').innerHTML=step===2?'See how to fix it <span aria-hidden="true">→</span>':'Next step <span aria-hidden="true">→</span>';
+      $('ic-next').innerHTML=step===2?'See how to fix it <span aria-hidden="true">→</span>':'See their first visit <span aria-hidden="true">→</span>';
       $('ic-choice').hidden=step!==1;
       $('ic-choice-question').textContent=decisions[business].question;
       $('ic-yes').setAttribute('aria-pressed',String(decision==='yes'));
@@ -445,20 +479,25 @@
       $('ic-next').hidden=step===3 || (step===1 && decision!=='no');
       if(step===1 && decision==='no') $('ic-next').innerHTML='Continue to Step 3 <span aria-hidden="true">→</span>';
     }
+    function showCurrentScene(){
+      if(window.matchMedia('(max-width: 760px)').matches){
+        document.querySelector('.ic-narrative').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+      }
+    }
     $('ic-yes').addEventListener('click',()=>selectDecision('yes'));
     $('ic-no').addEventListener('click',()=>selectDecision('no'));
     $('ic-good-exit').addEventListener('click',()=>{
       // A confident visitor is free to leave the journey and continue browsing.
       document.getElementById('services').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
     });
-    sectors.forEach(button=>button.addEventListener('click',()=>{business=button.dataset.sector;step=0;decision=null;render()}));
+    sectors.forEach(button=>button.addEventListener('click',()=>{business=button.dataset.sector;step=0;decision=null;render();showCurrentScene();showCurrentScene()}));
     steps.forEach(button=>button.addEventListener('click',()=>{
       const target=Number(button.dataset.step);
       if(target>1 && decision!=='no') {step=1;render();$('ic-yes').focus();return;}
-      step=target;render();
+      step=target;render();showCurrentScene();
     }));
-    $('ic-next').addEventListener('click',()=>{if(step===1 && decision!=='no')return;step=Math.min(3,step+1);render()});
-    $('ic-prev').addEventListener('click',()=>{step=Math.max(0,step-1);render()});
+    $('ic-next').addEventListener('click',()=>{if(step===1 && decision!=='no')return;step=Math.min(3,step+1);render();showCurrentScene()});
+    $('ic-prev').addEventListener('click',()=>{step=Math.max(0,step-1);render();showCurrentScene()});
     $('ic-replay').addEventListener('click',()=>{step=0;decision=null;render()});
     render();
   })();
