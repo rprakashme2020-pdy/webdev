@@ -169,6 +169,88 @@
   .ic-ctrl{min-height:53px}
 }
 @media(max-width:390px){.ic-phone{height:418px;width:208px}}
+
+/* ----------------------------------------------
+   WEBSITE TAKEOVER / interactive brand preview
+   Pure CSS + local JavaScript; no API or storage.
+   ---------------------------------------------- */
+.tk-section{padding:68px var(--gutter) 66px;background:#f3f3ef;position:relative;overflow:hidden}
+.tk-section:before{content:"02 / THE EXPERIMENT";position:absolute;right:var(--gutter);top:38px;font:700 10px/1 Manrope,Arial,sans-serif;letter-spacing:.17em;color:#858880}
+.tk-topline{display:flex;align-items:center;gap:15px;font:800 11px/1.4 Manrope,Arial,sans-serif;letter-spacing:.17em;color:#7b8178;margin-bottom:24px}.tk-pulse{width:9px;height:9px;box-shadow:0 0 0 6px #dce0d8;border-radius:50%;background:#222822;flex:none}
+.tk-header{display:grid;grid-template-columns:1.25fr .7fr;gap:45px;align-items:end;margin-bottom:33px}
+.tk-heading{font:800 clamp(34px,4.8vw,65px)/1.05 Manrope,Arial,sans-serif;letter-spacing:-.078em;max-width:720px;margin:0}.tk-heading em{font-weight:400;font-style:normal;color:#747a72}.tk-description{color:#4e554e;font-size:14px;line-height:1.7;max-width:360px;margin:0 0 5px}
+.tk-studio{display:grid;grid-template-columns:1fr .75fr;align-items:stretch;background:#fafaf8;border:1px solid #d8dcd4;box-shadow:0 13px 40px #151b1510;min-height:348px}
+.tk-inputs{padding:33px 35px 33px;display:flex;flex-direction:column;align-items:stretch;gap:22px}
+.tk-field-label{font:800 10px/1.4 Manrope,Arial,sans-serif;letter-spacing:.14em;color:#777f75;display:block;margin-bottom:9px}
+.tk-name{display:block;width:100%;border:0;border-bottom:1px solid #aeb6ac;border-radius:0;color:#111;background:transparent;font:700 clamp(21px,2.5vw,30px)/1.3 Manrope,Arial,sans-serif;letter-spacing:-.055em;padding:8px 0 12px;outline-offset:4px}
+.tk-name::placeholder{color:#999e95}.tk-name:focus{border-bottom-color:#171b16}
+.tk-options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0;padding:0;border:none}
+.tk-radio{position:relative;min-width:0;cursor:pointer}
+.tk-radio input{position:absolute;width:1px;height:1px;opacity:0;left:50%;top:50%}
+.tk-radio span{display:flex;min-height:62px;justify-content:center;align-items:center;text-align:center;border:1px solid #d7ddd4;padding:12px 8px;font-size:12px;font-weight:700;line-height:1.3;transition:background .2s,border-color .2s;white-space:normal}
+.tk-radio input:checked+span{background:#191d18;color:white;border-color:#191d18}
+.tk-radio input:focus-visible+span{outline:3px solid #6c8d70;outline-offset:3px}.tk-radio:hover span{border-color:#50564d}
+.tk-submit{border:0;background:#161a15;color:#fff;min-height:61px;font:800 14px Manrope,Arial,sans-serif;padding:16px 19px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:transform .22s,background .22s}
+.tk-submit:hover{background:#353c32;transform:translateY(-2px)}.tk-submit span:last-child{font-size:24px;font-weight:400}
+.tk-caption{font-size:11px;color:#798077;line-height:1.6;margin:-7px 0 0}
+.tk-studio-right{background:#202520;color:#f3f5ed;padding:26px;display:flex;flex-direction:column;justify-content:space-between;position:relative;min-height:290px;overflow:hidden;isolation:isolate}
+.tk-studio-right:after{content:"";position:absolute;border:1px solid #ffffff19;width:360px;height:360px;border-radius:100%;right:-166px;top:-115px;z-index:-1}
+.tk-live-label{font-size:9px;letter-spacing:.2em;color:#a5b2a1;font-weight:800;display:flex;align-items:center;gap:8px}.tk-live-label i{height:6px;width:6px;border-radius:50%;background:#dce8d1;box-shadow:0 0 0 4px #ffffff11}
+.tk-studio-preview{padding-top:45px}.tk-studio-preview small{display:block;color:#bac4b4;font-size:10px;letter-spacing:.14em;margin-bottom:11px;font-weight:800}.tk-studio-preview strong{font:800 clamp(28px,3.2vw,43px)/1.04 Manrope,Arial,sans-serif;letter-spacing:-.073em;display:block;word-break:break-word}.tk-studio-preview p{font-size:13px;color:#b9c5b5;margin:16px 0 0;line-height:1.5}
+.tk-preview-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #ffffff30;padding-top:14px;margin-top:25px;font:700 10px Manrope,Arial,sans-serif;letter-spacing:.1em;color:#c8d2c4}
+.tk-preview-footer span:last-child{font-size:20px}
+/* Full-screen takeover: the preview becomes the visible website */
+.tk-overlay[hidden]{display:none!important}.tk-overlay{--tk-bg:#f5eade;--tk-ink:#2c4239;--tk-accent:#d8e3c5;--tk-hue:#be7564;position:fixed;inset:0;z-index:3000;overflow:auto;overscroll-behavior:contain;background:var(--tk-bg);color:var(--tk-ink);clip-path:circle(0 at var(--tk-x,50%) var(--tk-y,50%));transition:clip-path .85s cubic-bezier(.22,.8,.16,1);isolation:isolate}
+.tk-overlay.tk-visible{clip-path:circle(160vmax at var(--tk-x,50%) var(--tk-y,50%))}
+.tk-overlay[data-theme="restaurant"]{--tk-bg:#251e1b;--tk-ink:#f9eee0;--tk-accent:#684836;--tk-hue:#d1a878}
+.tk-overlay[data-theme="shop"]{--tk-bg:#f3f0e9;--tk-ink:#222d31;--tk-accent:#c1d1d5;--tk-hue:#d49c69}
+body.tk-open{overflow:hidden}body.tk-open .sticky-mobile{display:none!important}
+.tk-utility{position:sticky;top:0;z-index:11;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#0e1110;color:#e9ece8;padding:10px clamp(18px,5vw,65px);min-height:51px;font-size:10px;font-weight:800;letter-spacing:.14em}
+.tk-utility-mark{display:flex;align-items:center;gap:11px}.tk-utility-mark i{width:7px;height:7px;border-radius:50%;background:#d4e3ce;box-shadow:0 0 0 5px #ffffff17}
+.tk-return{display:flex;align-items:center;justify-content:center;gap:12px;padding:8px 1px 8px 8px;background:transparent;border:0;color:#fff;font-size:11px;font-weight:800;white-space:nowrap;letter-spacing:0}.tk-return:hover{text-decoration:underline;text-underline-offset:4px}
+.tk-canvas{max-width:1480px;margin:auto;padding:0 clamp(20px,5vw,80px) 48px;position:relative}
+.tk-preview-nav{height:90px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid currentColor}
+.tk-brandname{font:800 clamp(18px,2.4vw,29px)/1.12 Manrope,Arial,sans-serif;letter-spacing:-.055em;max-width:62%;overflow-wrap:anywhere}
+.tk-preview-nav-links{display:flex;align-items:center;gap:32px;font-size:12px;font-weight:800}
+.tk-preview-nav-links a:hover{text-decoration:underline;text-underline-offset:5px}
+.tk-preview-hero{display:grid;grid-template-columns:1fr .88fr;gap:30px;align-items:center;min-height:min(75vh,750px);padding:54px 0 48px}
+.tk-preview-copy{min-width:0;position:relative;z-index:1}.tk-kicker{font-size:11px;letter-spacing:.18em;font-weight:800;opacity:.73;margin-bottom:24px}.tk-preview-copy h2{font:800 clamp(48px,6.6vw,110px)/1.01 Manrope,Arial,sans-serif;letter-spacing:-.086em;margin:0 0 23px;max-width:840px;overflow-wrap:break-word}
+.tk-preview-copy h2.tk-serif{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.065em;line-height:1.02;font-size:clamp(58px,7vw,123px)}
+.tk-preview-copy p{font-size:clamp(14px,1.3vw,18px);line-height:1.7;max-width:490px;margin:0 0 28px;opacity:.82}
+.tk-hero-link{display:inline-flex;align-items:center;justify-content:space-between;gap:38px;background:var(--tk-ink);color:var(--tk-bg);border:1px solid var(--tk-ink);padding:18px 22px;font-size:13px;font-weight:800;transition:transform .2s,opacity .2s}
+.tk-hero-link:hover{transform:translateY(-3px)}.tk-hero-link span{font-size:20px;font-weight:400}
+.tk-hero-art{height:min(520px,55vw);min-height:380px;width:100%;position:relative;isolation:isolate;display:grid;place-items:center;overflow:hidden;background:var(--tk-accent)}
+.tk-hero-art:after{content:"";position:absolute;inset:19px;border:1px solid var(--tk-ink);opacity:.13;pointer-events:none}
+.tk-art{width:100%;height:100%;display:none;position:relative;overflow:hidden}.tk-overlay[data-theme="preschool"] .tk-art-school,.tk-overlay[data-theme="restaurant"] .tk-art-restaurant,.tk-overlay[data-theme="shop"] .tk-art-shop{display:block}
+/* Preschool art: simple original vector-like shapes, no stock photos */
+.tk-art-school{background:#dce8d1}.tk-sun{width:110px;height:110px;border-radius:50%;background:#efbb77;position:absolute;right:16%;top:12%}.tk-hill{position:absolute;bottom:-95px;border-radius:50% 50% 0 0;width:125%;height:245px;left:-15%;background:#91a988}.tk-hill2{bottom:-120px;left:20%;background:#b8c9ad;transform:rotate(-9deg)}
+.tk-house{position:absolute;bottom:97px;left:19%;width:51%;height:41%;background:#f1d8bc;box-shadow:12px 10px 0 #00000008}.tk-house:before{content:"";position:absolute;bottom:100%;left:-14%;width:0;height:0;border-left:clamp(70px,12vw,150px) solid transparent;border-right:clamp(70px,12vw,150px) solid transparent;border-bottom:clamp(60px,8vw,110px) solid #b97c68;transform:translateY(0) rotate(0deg)}
+.tk-door{position:absolute;bottom:0;left:42%;width:24%;height:50%;border-radius:40px 40px 0 0;background:#84999e}.tk-window{position:absolute;top:21%;width:17%;height:24%;background:#faf4e8;border-radius:30px 30px 0 0}.tk-window.a{left:12%}.tk-window.b{right:12%}.tk-school-flower{position:absolute;width:55px;height:55px;border-radius:50%;background:#d48d70;left:9%;bottom:105px;box-shadow:30px 10px 0 #e8be82}.tk-school-flower:after{content:"";position:absolute;width:6px;height:120px;background:#607b5d;left:25px;top:50px}
+/* Restaurant art: editorial ceramic table setting */
+.tk-art-restaurant{background:radial-gradient(circle at 70% 20%,#926e53,#4b3329 75%)}
+.tk-art-restaurant:before{content:"";position:absolute;width:130%;height:53%;background:#3c2922;bottom:-20%;left:-13%;transform:rotate(-7deg)}
+.tk-plate{width:74%;aspect-ratio:1;position:absolute;top:16%;left:13%;border-radius:50%;background:#e6d7c2;box-shadow:0 25px 35px #150d0940,inset 0 0 0 15px #c5aa8a,inset 0 0 0 40px #f8e8cc}
+.tk-food{position:absolute;width:47%;aspect-ratio:1;top:30%;left:27%;background:radial-gradient(circle at 42% 45%,#bf7844 0 24%,#9e5832 25% 37%,#51704a 38% 44%,#bd8a46 45% 55%,transparent 56%);border-radius:50%;filter:drop-shadow(3px 5px 3px #43322260)}
+.tk-sprig{position:absolute;width:28%;height:12px;border-radius:50%;background:#7a975e;left:43%;top:48%;transform:rotate(-30deg);box-shadow:0 10px 0 #9ea45b}.tk-art-restaurant .tk-plate-dot{position:absolute;width:12px;height:12px;border-radius:50%;background:#a7543d;left:43%;top:39%}
+/* Shop art: sculptural bag, hand-drawn shadow */
+.tk-art-shop{background:#d1dee0}.tk-shop-circle{position:absolute;width:115%;aspect-ratio:1;border-radius:50%;background:#b4c6c7;left:12%;top:-24%}.tk-shop-floor{position:absolute;height:44%;left:-10%;bottom:-21%;width:120%;background:#a3b7b7;transform:rotate(-10deg)}
+.tk-shop-bag{position:absolute;width:56%;height:57%;left:23%;top:27%;background:#e8d5b4;transform:rotate(-8deg);box-shadow:22px 30px 22px #53696c50}.tk-shop-bag:before{content:"";position:absolute;height:40%;width:42%;border:11px solid #745f54;border-bottom:0;border-radius:150px 150px 0 0;left:29%;top:-29%}.tk-shop-bag:after{content:"✦";font-family:Georgia,serif;font-size:clamp(62px,10vw,110px);color:#795d4a;position:absolute;top:28%;left:38%}
+.tk-collections{border-top:1px solid currentColor;padding-top:22px;scroll-margin-top:70px}
+.tk-collections-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:25px}.tk-collections-heading span{font-size:10px;letter-spacing:.18em;font-weight:800;opacity:.7}.tk-collections-heading h3{font:800 clamp(28px,3vw,44px)/1.1 Manrope,Arial,sans-serif;letter-spacing:-.06em;margin:8px 0 0}.tk-overlay[data-theme="restaurant"] .tk-collections-heading h3{font-family:Georgia,serif;font-weight:400}
+.tk-features{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.tk-feature{background:color-mix(in srgb,var(--tk-accent) 65%,transparent);border:1px solid color-mix(in srgb,var(--tk-ink) 13%,transparent);padding:30px 24px;min-height:170px}.tk-feature .tk-feature-index{display:block;font-family:Georgia,serif;font-size:27px;opacity:.53;margin-bottom:22px}.tk-feature h4{font-size:18px;letter-spacing:-.05em;margin:0 0 7px;font-weight:800}.tk-feature p{font-size:13px;opacity:.8;line-height:1.6;margin:0;max-width:270px}
+.tk-preview-end{padding:42px 0 16px;display:flex;align-items:center;justify-content:space-between;gap:24px}.tk-end-copy{max-width:620px}.tk-end-copy strong{display:block;font:800 clamp(23px,2.4vw,32px)/1.14 Manrope,Arial,sans-serif;letter-spacing:-.05em}.tk-end-copy p{font-size:13px;line-height:1.6;opacity:.75;margin:11px 0 0}.tk-end-review{background:var(--tk-ink);color:var(--tk-bg);border:1px solid currentColor;min-height:54px;padding:15px 23px;font-weight:800;font-size:12px;white-space:nowrap}
+.tk-end-review:hover{opacity:.82}.tk-preview-end small{font-size:10px}.tk-overlay:focus{outline:none}
+@media(max-width:960px){.tk-preview-hero{grid-template-columns:1fr .8fr;gap:18px}.tk-preview-nav-links{gap:18px}.tk-house:before{border-left-width:115px;border-right-width:115px;border-bottom-width:80px}}
+@media(max-width:760px){
+ .tk-section{padding:54px var(--gutter) 46px}.tk-section:before{right:var(--gutter);top:20px;font-size:8px}.tk-topline{margin-top:9px;margin-bottom:20px}.tk-header{grid-template-columns:1fr;gap:13px;margin-bottom:25px}.tk-heading{font-size:clamp(37px,9.5vw,52px)}.tk-description{font-size:13px}.tk-studio{grid-template-columns:1fr}.tk-inputs{padding:24px 20px;gap:20px}.tk-radio span{padding:8px 5px;font-size:11px;min-height:54px}.tk-studio-right{min-height:205px;padding:23px}.tk-studio-preview{padding-top:22px}.tk-studio-preview strong{font-size:34px}.tk-studio-preview p{margin-top:10px}.tk-preview-footer{margin-top:18px}
+ .tk-utility{min-height:55px;padding:9px 19px}.tk-utility-mark{font-size:9px;letter-spacing:.1em}.tk-return{font-size:11px}.tk-canvas{padding:0 23px 42px}.tk-preview-nav{height:76px}.tk-brandname{font-size:20px;max-width:68%}.tk-preview-nav-links{gap:0}.tk-preview-nav-links a:first-child{display:none}.tk-preview-nav-links a{font-size:11px}
+ .tk-preview-hero{grid-template-columns:1fr;min-height:0;padding:41px 0 34px;gap:30px}.tk-kicker{font-size:10px;margin-bottom:15px}.tk-preview-copy h2{font-size:clamp(43px,11.2vw,76px);margin-bottom:18px;letter-spacing:-.075em}.tk-preview-copy h2.tk-serif{font-size:clamp(55px,13vw,88px)}.tk-preview-copy p{font-size:14px;line-height:1.6;margin-bottom:21px}.tk-hero-link{width:100%;max-width:390px;padding:16px 19px}
+ .tk-hero-art{height:min(85vw,410px);min-height:300px}.tk-house{bottom:72px;left:23%;width:49%;height:40%}.tk-house:before{border-left-width:105px;border-right-width:105px;border-bottom-width:78px}.tk-sun{width:85px;height:85px}.tk-hill{bottom:-125px}.tk-school-flower{bottom:79px}.tk-plate{top:8%}
+ .tk-collections-heading{margin-bottom:18px}.tk-features{grid-template-columns:1fr;gap:8px}.tk-feature{padding:20px;min-height:0}.tk-feature .tk-feature-index{font-size:22px;margin-bottom:12px}.tk-feature h4{font-size:17px}.tk-preview-end{flex-direction:column;align-items:stretch;padding:35px 0 15px}.tk-end-review{width:100%}
+}
+@media(max-width:380px){.tk-radio span{font-size:10px}.tk-utility-mark span{max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tk-return{font-size:10px}.tk-preview-copy h2{font-size:42px}.tk-house:before{border-left-width:86px;border-right-width:86px;border-bottom-width:69px}}
+@media(prefers-reduced-motion:reduce){.tk-overlay{transition:none}.tk-submit,.tk-hero-link{transition:none}}
+
 </style>
 </head>
 <body>
@@ -203,6 +285,35 @@
         <div class="locations"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg><span>Pondicherry &nbsp;·&nbsp; Chennai &nbsp;·&nbsp; Bengaluru</span></div>
       </div>
     </section>
+
+    <section class="tk-section" id="takeover" aria-labelledby="tk-section-title">
+      <div class="tk-topline"><span class="tk-pulse" aria-hidden="true"></span> A LITTLE EXPERIMENT FOR YOUR BUSINESS</div>
+      <div class="tk-header">
+        <h2 class="tk-heading" id="tk-section-title">What if this website<br><em>became yours?</em></h2>
+        <p class="tk-description">Enter your business name. Watch this whole website change into a concept made for your business. No downloads, no sign-up.</p>
+      </div>
+      <div class="tk-studio">
+        <div class="tk-inputs">
+          <div><label class="tk-field-label" for="tk-business">01 / WHAT'S YOUR BUSINESS CALLED?</label><input class="tk-name" id="tk-business" maxlength="48" autocomplete="organization" placeholder="Enter your business name" type="text" value="Little Stars Academy"></div>
+          <div>
+            <div class="tk-field-label" id="tk-sector-label">02 / CHOOSE YOUR INDUSTRY</div>
+            <fieldset class="tk-options" aria-labelledby="tk-sector-label">
+              <label class="tk-radio"><input type="radio" name="tk-industry" value="preschool" checked><span>Preschool</span></label>
+              <label class="tk-radio"><input type="radio" name="tk-industry" value="restaurant"><span>Restaurant / Café</span></label>
+              <label class="tk-radio"><input type="radio" name="tk-industry" value="shop"><span>Local shop</span></label>
+            </fieldset>
+          </div>
+          <button class="tk-submit" id="tk-launch" type="button"><span>Transform this website</span><span aria-hidden="true">↗</span></button>
+          <p class="tk-caption">A fun personalized design preview, not a finished website or live audit. Built without paid AI tools.</p>
+        </div>
+        <div class="tk-studio-right" aria-hidden="true">
+          <div class="tk-live-label"><i></i> PREVIEW SIGNAL / READY</div>
+          <div class="tk-studio-preview"><small>YOUR BRAND COULD LOOK LIKE THIS</small><strong id="tk-ghost-name">Little Stars Academy</strong><p id="tk-ghost-type">A brighter beginning starts here.</p></div>
+          <div class="tk-preview-footer"><span>01 / YOUR NEXT WEBSITE</span><span>↗</span></div>
+        </div>
+      </div>
+    </section>
+
     <section class="section-pad" id="challenge">
       <div class="micro">THE CHALLENGE</div>
       <h2 class="section-headline">Your business might be losing<br class="desktop-break"> enquiries without you knowing it.</h2>
@@ -223,7 +334,8 @@
       </div>
       <div class="ic-main">
   <div class="ic-story">
-    <div class="ic-setup"><div class="ic-picker-label">FIRST, CHOOSE YOUR BUSINESS</div>
+    <div class="ic-setup">
+<div class="ic-picker-label">FIRST, CHOOSE YOUR BUSINESS</div>
           <div class="ic-segments" role="group" aria-label="Choose an example business type">
             <button class="ic-segment" type="button" data-sector="preschool" aria-pressed="true">Preschool</button>
             <button class="ic-segment" type="button" data-sector="shop" aria-pressed="false">Local shop</button>
@@ -234,11 +346,15 @@
             <button data-step="1" type="button">02 / VISIT</button>
             <button data-step="2" type="button">03 / LEAVE</button>
             <button data-step="3" type="button">04 / FIX</button>
-          </div></div>
-    <div class="ic-narrative"><div class="ic-label" id="ic-scene-label">STEP 01 / SEARCH</div>
+          </div>
+    </div>
+    <div class="ic-narrative">
+<div class="ic-label" id="ic-scene-label">STEP 01 / SEARCH</div>
           <h3 id="ic-scene-title" aria-live="polite">Will customers find you?</h3>
-          <p class="ic-story-copy" id="ic-scene-copy">A parent searches online for a preschool nearby.</p></div>
-    <div class="ic-reflection"><div class="ic-moral" id="ic-scene-insight">If parents don’t discover your school, they may never reach your website.</div>
+          <p class="ic-story-copy" id="ic-scene-copy">A parent searches online for a preschool nearby.</p>
+    </div>
+    <div class="ic-reflection">
+<div class="ic-moral" id="ic-scene-insight">If parents don’t discover your school, they may never reach your website.</div>
           <div class="ic-choice" id="ic-choice" hidden>
             <p class="ic-choice-question" id="ic-choice-question">Does your website have what it takes to turn visitors into enquiries?</p>
             <div class="ic-choice-buttons" role="group" aria-label="Assess whether your website convinces visitors to enquire">
@@ -255,7 +371,8 @@
               <button type="button" class="btn" data-audit>Review Your Website for Free <span aria-hidden="true">↗</span></button>
               <button class="ic-replay" id="ic-replay" type="button">↺ Replay experience</button>
             </div>
-          </div></div>
+          </div>
+    </div>
   </div>
   <div class="ic-show" aria-label="Illustrated phone showing a fictional customer journey">
           <div class="ic-orbit" aria-hidden="true"></div>
@@ -377,6 +494,42 @@
   <footer><div><strong>PEE AAR DIGITAL</strong><div>By Prakash Ravikumar · © <span id="copyright-year">2026</span></div></div><div class="foot-links"><a href="https://www.instagram.com/prakash_buildz/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="tel:+917397559527">7397559527</a><a href="#top">Back to top ↑</a></div></footer>
 </div>
 <div class="sticky-mobile" aria-label="Free website review"><button type="button" class="btn btn-black" data-audit>Review Your Website for Free <span class="btn-arrow" aria-hidden="true">↗</span></button></div>
+
+<div class="tk-overlay" id="tk-overlay" data-theme="preschool" role="dialog" aria-modal="true" aria-labelledby="tk-preview-title" tabindex="-1" hidden>
+  <div class="tk-utility"><div class="tk-utility-mark"><i aria-hidden="true"></i><span>YOU'RE INSIDE YOUR WEBSITE CONCEPT</span></div><button class="tk-return" id="tk-return" type="button">← Return to Prakash</button></div>
+  <div class="tk-canvas">
+    <nav class="tk-preview-nav" aria-label="Example website navigation">
+      <div class="tk-brandname" id="tk-preview-brand">Little Stars Academy</div>
+      <div class="tk-preview-nav-links"><a href="#tk-why" id="tk-nav-explore">Explore</a><a href="#tk-footer">Contact ↗</a></div>
+    </nav>
+    <div class="tk-preview-hero">
+      <div class="tk-preview-copy">
+        <div class="tk-kicker" id="tk-kicker">PRESCHOOL &amp; DAYCARE / DISCOVER • LEARN • GROW</div>
+        <h2 id="tk-preview-title">A brighter beginning for little minds.</h2>
+        <p id="tk-preview-subtitle">A warm, caring place where curiosity grows and every child feels at home.</p>
+        <a class="tk-hero-link" href="#tk-why"><span id="tk-preview-action">Explore our school</span><span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="tk-hero-art" aria-label="Original graphic illustration for this website concept" role="img">
+        <div class="tk-art tk-art-school"><div class="tk-sun"></div><div class="tk-hill"></div><div class="tk-hill tk-hill2"></div><div class="tk-house"><div class="tk-door"></div><div class="tk-window a"></div><div class="tk-window b"></div></div><div class="tk-school-flower"></div></div>
+        <div class="tk-art tk-art-restaurant"><div class="tk-plate"></div><div class="tk-food"></div><div class="tk-sprig"></div><div class="tk-plate-dot"></div></div>
+        <div class="tk-art tk-art-shop"><div class="tk-shop-circle"></div><div class="tk-shop-floor"></div><div class="tk-shop-bag"></div></div>
+      </div>
+    </div>
+    <div class="tk-collections" id="tk-why">
+      <div class="tk-collections-heading"><div><span>THE EXPERIENCE / 001</span><h3 id="tk-features-heading">Every little moment matters.</h3></div><span>MADE FOR YOUR INDUSTRY</span></div>
+      <div class="tk-features">
+        <article class="tk-feature"><span class="tk-feature-index">01.</span><h4 id="tk-feature-1-title">Little explorers</h4><p id="tk-feature-1-copy">Space to be curious, create and learn.</p></article>
+        <article class="tk-feature"><span class="tk-feature-index">02.</span><h4 id="tk-feature-2-title">Big discoveries</h4><p id="tk-feature-2-copy">New things to try each day.</p></article>
+        <article class="tk-feature"><span class="tk-feature-index">03.</span><h4 id="tk-feature-3-title">Growing together</h4><p id="tk-feature-3-copy">Welcoming moments for every family.</p></article>
+      </div>
+    </div>
+    <div class="tk-preview-end" id="tk-footer">
+      <div class="tk-end-copy"><strong>Imagine what your actual website could become.</strong><p>This is a personalized design concept, not your business's real website. Want to learn how your existing website could convert more visitors into enquiries?</p></div>
+      <button class="tk-end-review" id="tk-review" type="button">Review Your Website for Free ↗</button>
+    </div>
+  </div>
+</div>
+
 <dialog id="audit-dialog" aria-labelledby="audit-title">
   <div class="modal-top"><div><div class="micro">FREE WEBSITE REVIEW</div><h2 id="audit-title">Discover what could work better.</h2></div><button class="close-modal" type="button" aria-label="Close form">×</button></div>
   <form id="audit-form" class="modal-body"><p>Share your business details. I'll review the available information and discuss useful improvements with you on WhatsApp.</p>
@@ -498,7 +651,7 @@
     }));
     $('ic-next').addEventListener('click',()=>{if(step===1 && decision!=='no')return;step=Math.min(3,step+1);render();showCurrentScene()});
     $('ic-prev').addEventListener('click',()=>{step=Math.max(0,step-1);render();showCurrentScene()});
-    $('ic-replay').addEventListener('click',()=>{step=0;decision=null;render()});
+    $('ic-replay').addEventListener('click',()=>{step=0;decision=null;render();showCurrentScene()});
     render();
   })();
 
@@ -515,6 +668,118 @@
       img.addEventListener('error', () => img.classList.remove('is-ready'));
     });
   })();
+</script>
+
+
+<script>
+/* Website Takeover: no external scripts, API keys, or data collection. */
+(()=>{
+  const intro=document.getElementById('takeover');
+  const overlay=document.getElementById('tk-overlay');
+  const nameField=document.getElementById('tk-business');
+  const launch=document.getElementById('tk-launch');
+  const exit=document.getElementById('tk-return');
+  const review=document.getElementById('tk-review');
+  const page=document.getElementById('top');
+  const themeFields=Array.from(document.querySelectorAll('input[name="tk-industry"]'));
+  const demos={
+    preschool:{
+      demo:'A brighter beginning starts here.',
+      kicker:'PRESCHOOL & DAYCARE / DISCOVER • LEARN • GROW',
+      headline:'A brighter beginning for little minds.',
+      text:'A warm, caring place where curiosity grows and every child feels at home.',
+      action:'Explore our school',
+      heading:'Every little moment matters.',
+      features:[['Little explorers','Space to be curious, create and learn.'],['Big discoveries','New things to try each day.'],['Growing together','Welcoming moments for every family.']]
+    },
+    restaurant:{
+      demo:'Good food. Great memories.',
+      kicker:'RESTAURANT & CAFÉ / FOOD • PEOPLE • MOMENTS',
+      headline:'Good food. Great moments.',
+      text:'Fresh flavours, welcoming spaces and memorable experiences worth sharing.',
+      action:'Discover our menu',
+      heading:'Made to savour.',
+      features:[['Thoughtfully prepared','A place for every flavour and every occasion.'],['Time well spent','From quick coffees to long conversations.'],['Always inviting','A warm welcome, every single visit.']]
+    },
+    shop:{
+      demo:'The neighbourhood, reimagined.',
+      kicker:'LOCAL SHOP / FIND • DISCOVER • LOVE',
+      headline:'Find something you’ll love.',
+      text:'Discover useful products, personal service and a local business worth choosing.',
+      action:'Explore our collection',
+      heading:'A little different. A lot more local.',
+      features:[['Curated selection','Make it easy to find the right products.'],['Made for your area','Help nearby customers know what you offer.'],['Easy to enquire','Give visitors a simple way to reach out.']]
+    }
+  };
+  let lastFocused=null;
+  let hideTimeout;
+  const $=(id)=>document.getElementById(id);
+  const industry=()=>themeFields.find(x=>x.checked)?.value||'preschool';
+  const brand=()=>nameField.value.trim().replace(/\s+/g,' ').slice(0,48)||'Your Business';
+  function updateGhost(){ $('tk-ghost-name').textContent=brand();$('tk-ghost-type').textContent=demos[industry()].demo; }
+  function fillPreview(){
+    const data=demos[industry()];overlay.dataset.theme=industry();
+    $('tk-preview-brand').textContent=brand();
+    $('tk-kicker').textContent=data.kicker;
+    const title=$('tk-preview-title');title.textContent=data.headline;title.classList.toggle('tk-serif',industry()==='restaurant');
+    $('tk-preview-subtitle').textContent=data.text;
+    $('tk-preview-action').textContent=data.action;
+    $('tk-features-heading').textContent=data.heading;
+    data.features.forEach(([headline,description],i)=>{
+      $('tk-feature-'+(i+1)+'-title').textContent=headline;
+      $('tk-feature-'+(i+1)+'-copy').textContent=description;
+    });
+  }
+  function openTakeover(){
+    if(!overlay.hidden)return;
+    window.clearTimeout(hideTimeout);
+    lastFocused=document.activeElement;
+    fillPreview();
+    const rect=launch.getBoundingClientRect();
+    const x=Math.max(0,Math.min(window.innerWidth,rect.left+rect.width/2));
+    const y=Math.max(0,Math.min(window.innerHeight,rect.top+rect.height/2));
+    overlay.style.setProperty('--tk-x',x+'px');
+    overlay.style.setProperty('--tk-y',y+'px');
+    overlay.hidden=false;
+    overlay.scrollTop=0;
+    document.body.classList.add('tk-open');
+    page.inert=true;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>overlay.classList.add('tk-visible')));
+    exit.focus({preventScroll:true});
+  }
+  function closeTakeover(options={}){
+    if(overlay.hidden)return;
+    overlay.classList.remove('tk-visible');
+    document.body.classList.remove('tk-open');
+    page.inert=false;
+    const done=()=>{overlay.hidden=true;overlay.scrollTop=0;};
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)done();
+    else hideTimeout=window.setTimeout(done,870);
+    if(!options.openAudit&&lastFocused&&typeof lastFocused.focus==='function')lastFocused.focus({preventScroll:true});
+  }
+  nameField.addEventListener('input',updateGhost);
+  themeFields.forEach(x=>x.addEventListener('change',updateGhost));
+  launch.addEventListener('click',openTakeover);
+  exit.addEventListener('click',()=>closeTakeover());
+  review.addEventListener('click',()=>{
+    const name=$('business-name');if(name&&!name.value.trim())name.value=brand()==='Your Business'?'':brand();
+    closeTakeover({openAudit:true});
+    const modal=$('audit-dialog');
+    if(modal&&typeof modal.showModal==='function')modal.showModal();
+  });
+  document.addEventListener('keydown',e=>{
+    if(overlay.hidden)return;
+    if(e.key==='Escape'){e.preventDefault();closeTakeover();return;}
+    if(e.key==='Tab'){
+      const nodes=Array.from(overlay.querySelectorAll('button:not([disabled]),a[href]')).filter(el=>el.getClientRects().length);
+      if(!nodes.length)return;
+      const first=nodes[0],last=nodes[nodes.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+    }
+  });
+  updateGhost();
+})();
 </script>
 
 </body>
