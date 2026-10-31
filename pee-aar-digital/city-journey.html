@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3D City Journey — PEE AAR DIGITAL</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a fixed WebGL map of the three cities sits behind scrolling text panels; the camera flies to each city as its panel passes. */
+  :root {
+    --ink: #0A1218;
+    --ink-2: #0F1B24;
+    --line: #223646;
+    --fg: #E7EEF1;
+    --mute: #9FB2BC;
+    --bay: #43D1DC;
+    --marigold: #FFB23F;
+    --display: 'Bricolage Grotesque', system-ui, sans-serif;
+    --body: 'Instrument Sans', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--fg);
+    font: 400 1rem/1.6 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  img { max-width: 100%; }
+  :focus-visible { outline: 2px solid var(--marigold); outline-offset: 3px; }
+
+  .wrap {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  /* Stage layers */
+  #stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; background: var(--ink); }
+  .tag {
+    position: fixed; left: 0; top: 0; z-index: 1; pointer-events: none;
+    font: 500 11px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase;
+    color: var(--fg); white-space: nowrap; text-shadow: 0 1px 8px var(--ink);
+    opacity: 0; transition: opacity .3s, color .3s;
+  }
+  .tag small { display: block; color: var(--mute); letter-spacing: .06em; font-size: 10px; }
+  .tag.on { color: var(--marigold); }
+  .scrim {
+    position: fixed; inset: 0; z-index: 2; pointer-events: none;
+    background: linear-gradient(90deg, rgba(10,18,24,.88) 0, rgba(10,18,24,.6) 36%, rgba(10,18,24,0) 62%);
+  }
+  main { position: relative; z-index: 3; }
+
+  /* Header */
+  .top {
+    position: fixed; inset: 0 0 auto 0; z-index: 20;
+    padding-top: env(safe-area-inset-top, 0px);
+    background: rgba(10,18,24,.72);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(34,54,70,.7);
+  }
+  .top-in { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 1.15rem/1 var(--display); letter-spacing: -.01em; text-decoration: none; }
+  .brand i { width: 12px; height: 12px; background: var(--marigold); transform: rotate(45deg); display: block; flex: none; }
+  .brand small { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); padding-left: 10px; border-left: 1px solid var(--line); }
+  .nav { display: flex; align-items: center; gap: 22px; font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .nav a { text-decoration: none; color: var(--mute); }
+  .nav a:hover { color: var(--fg); }
+  .nav .pill { color: var(--ink); background: var(--marigold); padding: 10px 14px; font-weight: 500; }
+  .nav .pill:hover { color: var(--ink); background: #FFC165; }
+  @media (max-width: 720px) { .nav a:not(.pill) { display: none; } }
+  @media (max-width: 460px) { .brand small { display: none; } }
+
+  /* Panels */
+  .panel { display: flex; align-items: center; padding-block: clamp(72px, 12vh, 140px); }
+  .copy { max-width: 33rem; min-width: 0; }
+  .panel.city { min-height: 92svh; }
+  .eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--bay); margin: 0 0 18px; }
+  h1, h2 { font-family: var(--display); font-weight: 700; letter-spacing: -.03em; line-height: 1.02; margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(2.4rem, 6.2vw, 4.8rem); }
+  h1 span { color: var(--marigold); }
+  h2 { font-size: clamp(2.2rem, 5.6vw, 4rem); }
+  .lead { font-size: 1.125rem; color: var(--mute); margin: 22px 0 0; max-width: 30rem; }
+  .copy p { margin: 18px 0 0; color: var(--mute); max-width: 30rem; }
+  .copy p.eyebrow { margin: 0 0 18px; color: var(--bay); }
+  .hero { padding-top: clamp(90px, 18vh, 200px); padding-bottom: clamp(60px, 12vh, 140px); }
+  .btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn {
+    display: inline-block; font: 500 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+    text-decoration: none; padding: 15px 20px; border: 1px solid var(--line); color: var(--fg); background: transparent; cursor: pointer;
+  }
+  .btn:hover { border-color: var(--bay); color: var(--bay); }
+  .btn.main { background: var(--marigold); border-color: var(--marigold); color: var(--ink); }
+  .btn.main:hover { background: #FFC165; border-color: #FFC165; color: var(--ink); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0; padding: 0; list-style: none; }
+  .tags li { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 8px 10px; border: 1px solid var(--line); color: var(--fg); }
+
+  /* Sheets: dense content set off against the scene */
+  .sheet {
+    width: 100%; max-width: 64rem; min-width: 0;
+    background: rgba(10,18,24,.86);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    padding: clamp(22px, 4vw, 48px);
+  }
+  .sheet > h2 { margin-bottom: 28px; }
+  .svc { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; margin: 0; padding: 0; list-style: none; }
+  .svc li { padding: 18px 0; border-top: 1px solid var(--line); }
+  .svc b { display: block; font: 600 1.05rem/1.3 var(--display); margin-bottom: 4px; }
+  .svc span { color: var(--mute); font-size: .95rem; }
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 0; list-style: none; counter-reset: s; }
+  .steps li { border-top: 2px solid var(--bay); padding-top: 16px; counter-increment: s; }
+  .steps li::before { content: counter(s, decimal-leading-zero); display: block; font: 500 12px/1 var(--mono); color: var(--bay); letter-spacing: .1em; margin-bottom: 12px; }
+  .steps b { display: block; font: 600 1.15rem/1.2 var(--display); margin-bottom: 6px; }
+  .steps span { color: var(--mute); font-size: .95rem; }
+  @media (max-width: 800px) {
+    .svc { grid-template-columns: minmax(0, 1fr); }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 420px) { .steps { grid-template-columns: minmax(0, 1fr); } }
+
+  /* About */
+  .sheet.about { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: clamp(24px, 4vw, 44px); align-items: start; }
+  .portrait { margin: 0; min-width: 0; }
+  .portrait img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border: 1px solid var(--line); background: var(--ink-2); }
+  .portrait figcaption { font: 500 11px/1.5 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-top: 12px; }
+  .about-copy { min-width: 0; }
+  .about-copy h2 { margin-bottom: 18px; }
+  .about-lead { margin: 0; font-size: 1.125rem; color: var(--fg); max-width: 34rem; }
+  .about-meta { margin: 14px 0 0; font: 500 12px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--marigold); }
+  .about-list { margin: 24px 0 0; display: grid; }
+  .about-list div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .about-list dt { font: 500 11px/1.6 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--bay); }
+  .about-list dd { margin: 0; color: var(--mute); }
+  .army { margin: 22px 0 0; font: 500 12px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+  .about-copy .tags { margin-top: 12px; }
+  .army-note { margin: 12px 0 0; font: 400 13px/1.4 var(--mono); color: var(--marigold); }
+  @media (max-width: 700px) {
+    .sheet.about { grid-template-columns: minmax(0, 1fr); }
+    .portrait { max-width: 14rem; }
+    .about-list div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  }
+
+  /* Contact */
+  .phone { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; margin: 8px 0 26px; }
+  .num { font: 500 clamp(1.6rem, 5vw, 2.6rem)/1.1 var(--mono); letter-spacing: -.02em; color: var(--marigold); user-select: all; }
+  .contact-row { display: flex; flex-wrap: wrap; gap: 12px; }
+  .note { font: 400 13px/1.5 var(--mono); color: var(--mute); min-height: 1.5em; margin: 14px 0 0; }
+  .areas { margin: 28px 0 0; padding-top: 18px; border-top: 1px solid var(--line); font: 500 12px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+  footer { padding-block: 28px 40px; font: 400 12px/1.5 var(--mono); color: var(--mute); background: var(--ink); position: relative; z-index: 3; border-top: 1px solid var(--line); }
+
+  /* Portrait: scene on top, text low */
+  @media (max-width: 899px) {
+    .scrim { background: linear-gradient(180deg, rgba(10,18,24,0) 18%, rgba(10,18,24,.82) 58%, rgba(10,18,24,.92) 100%); }
+    .panel.city { align-items: flex-end; min-height: 88svh; padding-block: 72px 56px; }
+    .hero { padding-top: 34svh; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .tag { transition: none; } }
+</style>
+<style>
+.hero h1{font-size:clamp(2.65rem,7vw,6rem)} .panel.city{min-height:96svh} .nav{gap:12px}.nav a{font-size:10px}
+#map-lightweight{display:none;position:fixed;inset:0;z-index:0;background:radial-gradient(circle at 65% 40%,#203440,#0a1218 70%);overflow:hidden}
+#map-lightweight svg{position:absolute;top:8vh;right:-6vw;width:min(950px,115vw);height:auto;opacity:.72;max-height:75vh}
+body.no-webgl #map-lightweight{display:block} body.no-webgl #stage{display:none}
+@media(max-width:720px){.nav{display:none}.hero{padding-top:35svh}.hero h1{font-size:clamp(2.6rem,10vw,4.2rem)}#map-lightweight svg{width:140vw;right:-30vw;top:3vh;max-height:60vh}}
+</style></head>
+<body>
+
+<canvas id="stage" aria-hidden="true"></canvas><div id="map-lightweight" aria-hidden="true"><svg viewBox="0 0 560 430" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><pattern id="cgrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#4f7782" opacity=".3"/></pattern></defs><rect width="560" height="430" fill="url(#cgrid)"/><g fill="none" stroke="#43d1dc"><path d="M395 0Q415 110 450 200T475 430" opacity=".3"/><path d="M415 0Q435 110 470 200T495 430" opacity=".17"/><path d="M152 141Q286 65 397 128Q460 213 382 308Q230 332 152 141" stroke-dasharray="6 7" stroke-width="2" opacity=".75"/></g><g fill="#ffb23f"><circle cx="152" cy="141" r="8"/><circle cx="382" cy="308" r="8"/></g><circle fill="#43d1dc" cx="397" cy="128" r="8"/><g fill="none" stroke="#ffb23f" opacity=".65"><circle cx="152" cy="141" r="22"/><circle cx="382" cy="308" r="22"/></g><circle cx="397" cy="128" r="22" stroke="#43d1dc" stroke-opacity=".65" fill="none"/><g fill="#d9e4ea" font-family="sans-serif" font-size="13" font-weight="700" letter-spacing="1"><text x="94" y="105">BENGALURU</text><text x="414" y="108">CHENNAI</text><text x="384" y="349">PONDICHERRY</text></g></svg></div>
+<div class="tag" data-tag><span>Pondicherry</span><small>11.94°N 79.81°E</small></div>
+<div class="tag" data-tag><span>Chennai</span><small>13.08°N 80.27°E</small></div>
+<div class="tag" data-tag><span>Bengaluru</span><small>12.97°N 77.59°E</small></div>
+<div class="scrim"></div>
+
+<header class="top"><div class="wrap top-in"><a href="#top" class="brand"><i></i>PEE AAR <small>3D CITY JOURNEY</small></a><nav class="nav"><a href="#cities">Pondicherry</a><a href="#chennai">Chennai</a><a href="#bengaluru">Bengaluru</a></nav></div></header>
+
+<main id="top"><section class="panel wrap hero" data-cam>
+    <div class="copy">
+      <p class="eyebrow">PEE AAR DIGITAL / THE THREE-CITY JOURNEY</p>
+      <h1>Every great idea starts <span>somewhere.</span></h1>
+      <p class="lead">Explore the three cities where I create and help businesses become easier to discover, trust and contact.</p>
+      <div class="btns"><a class="btn main" href="#cities">Explore the cities ↓</a></div>
+    </div>
+  </section>
+<section class="panel wrap city" id="cities" data-cam>
+    <div class="copy">
+      <p class="eyebrow">11.9416°N, 79.8083°E</p>
+      <h2>Pondicherry</h2>
+      <p>Pondicherry is home. Hotels, cafés, boutique stays, wellness and retail here get found on Google Maps, Instagram and a website that works on a phone.</p>
+      <ul class="tags"><li>Websites</li><li>Local SEO</li><li>Instagram</li></ul>
+    </div>
+  </section>
+<section class="panel wrap city" id="chennai" data-cam>
+    <div class="copy">
+      <p class="eyebrow">13.0827°N, 80.2707°E</p>
+      <h2>Chennai</h2>
+      <p>Chennai is my playground. A big, crowded market where clinics, schools, manufacturers and B2B services need a clear website and ads that bring real enquiries.</p>
+      <ul class="tags"><li>Websites</li><li>Google Ads</li><li>Landing pages</li></ul>
+    </div>
+  </section>
+<section class="panel wrap city" id="bengaluru" data-cam>
+    <div class="copy">
+      <p class="eyebrow">12.9716°N, 77.5946°E</p>
+      <h2>Bengaluru</h2>
+      <p>Bengaluru is my playground too. Startups, D2C brands and service companies get a sharp website, paid social and reports that show cost per lead.</p>
+      <ul class="tags"><li>Meta ads</li><li>Branding</li><li>Reports</li></ul>
+    </div>
+  </section></main>
+
+<footer class="wrap">PEE AAR DIGITAL · PONDICHERRY · CHENNAI · BENGALURU</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  /* ---- 3D scene ---- */
+  if (!window.THREE) {document.body.classList.add("no-webgl");return;}
+  var T = THREE;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var canvas = document.getElementById('stage');
+  var renderer;
+  try { renderer = new T.WebGLRenderer({ canvas: canvas, antialias: true }); } catch (e) {document.body.classList.add("no-webgl");return;}
+  renderer.setClearColor(0x0A1218, 1);
+
+  var BAY = 0x43D1DC, MARI = 0xFFB23F;
+  var scene = new T.Scene();
+  scene.fog = new T.Fog(0x0A1218, 55, 150);
+  var camera = new T.PerspectiveCamera(42, 1, 0.1, 400);
+
+  function P(lat, lon) { return new T.Vector3((lon - 79.2) * 20, 0, -(lat - 12.5) * 20); }
+
+  var grid = new T.GridHelper(220, 88, 0x223646, 0x142530);
+  grid.material.transparent = true; grid.material.opacity = 0.6;
+  scene.add(grid);
+
+  /* Coromandel coast with bathymetry-style contours into the Bay of Bengal */
+  var coastLL = [[14.2, 80.15], [13.6, 80.2], [13.08, 80.32], [12.6, 80.22], [12.25, 79.98], [11.94, 79.86], [11.5, 79.8], [11.0, 79.85], [10.5, 79.92]];
+  for (var k = 0; k < 5; k++) {
+    var pts = coastLL.map(function (c) { var v = P(c[0], c[1]); v.x += k * 2.6; v.y = 0.05; return v; });
+    var curve = new T.CatmullRomCurve3(pts);
+    var g = new T.BufferGeometry().setFromPoints(curve.getPoints(140));
+    var m = new T.LineBasicMaterial({ color: BAY, transparent: true, opacity: k === 0 ? 0.95 : 0.5 - k * 0.09 });
+    scene.add(new T.Line(g, m));
+  }
+
+  /* City nodes: Pondicherry, Chennai, Bengaluru */
+  var CITIES = [
+    { lat: 11.9416, lon: 79.8083 },
+    { lat: 13.0827, lon: 80.2707 },
+    { lat: 12.9716, lon: 77.5946 }
+  ];
+  var nodes = CITIES.map(function (c, j) {
+    var grp = new T.Group();
+    grp.position.copy(P(c.lat, c.lon));
+    var wire = new T.Mesh(new T.OctahedronGeometry(1.7), new T.MeshBasicMaterial({ color: MARI, wireframe: true }));
+    wire.position.y = 3.2;
+    var core = new T.Mesh(new T.OctahedronGeometry(0.7), new T.MeshBasicMaterial({ color: MARI }));
+    core.position.y = 3.2;
+    var beam = new T.Mesh(new T.CylinderGeometry(0.05, 0.05, 3.2, 6), new T.MeshBasicMaterial({ color: MARI, transparent: true, opacity: 0.6 }));
+    beam.position.y = 1.6;
+    var ring = new T.Mesh(new T.RingGeometry(1.9, 2.05, 64), new T.MeshBasicMaterial({ color: BAY, transparent: true, opacity: 0.9, side: T.DoubleSide }));
+    ring.rotation.x = -Math.PI / 2; ring.position.y = 0.03;
+    var pulse = new T.Mesh(new T.RingGeometry(1.9, 2.05, 64), new T.MeshBasicMaterial({ color: BAY, transparent: true, opacity: 0.6, side: T.DoubleSide }));
+    pulse.rotation.x = -Math.PI / 2; pulse.position.y = 0.03;
+    grp.add(wire, core, beam, ring, pulse);
+    scene.add(grp);
+    return { group: grp, wire: wire, core: core, pulse: pulse, phase: j / 3 };
+  });
+
+  /* Arcs between cities with a travelling pulse */
+  var arcs = [[0, 1], [1, 2], [2, 0]].map(function (pair, j) {
+    var a = nodes[pair[0]].group.position.clone(); a.y = 3.2;
+    var b = nodes[pair[1]].group.position.clone(); b.y = 3.2;
+    var mid = a.clone().add(b).multiplyScalar(0.5); mid.y = 3.2 + a.distanceTo(b) * 0.32;
+    var curve = new T.QuadraticBezierCurve3(a, mid, b);
+    var line = new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(90)), new T.LineBasicMaterial({ color: BAY, transparent: true, opacity: 0.55 }));
+    scene.add(line);
+    var dot = new T.Mesh(new T.SphereGeometry(0.3, 12, 12), new T.MeshBasicMaterial({ color: MARI }));
+    scene.add(dot);
+    return { curve: curve, dot: dot, off: j / 3 };
+  });
+
+  /* Rising particles */
+  var N = window.innerWidth < 700 ? 320 : 760;
+  var ppos = new Float32Array(N * 3), pspd = new Float32Array(N);
+  for (var i = 0; i < N; i++) {
+    ppos[i * 3] = (Math.random() - 0.5) * 130;
+    ppos[i * 3 + 1] = Math.random() * 36;
+    ppos[i * 3 + 2] = (Math.random() - 0.5) * 90 - 4;
+    pspd[i] = 0.6 + Math.random() * 1.4;
+  }
+  var pgeo = new T.BufferGeometry();
+  pgeo.setAttribute('position', new T.BufferAttribute(ppos, 3));
+  scene.add(new T.Points(pgeo, new T.PointsMaterial({ color: BAY, size: 0.28, transparent: true, opacity: 0.7, depthWrite: false, blending: T.AdditiveBlending })));
+
+  /* Camera path: one keyframe per scroll panel, in page order */
+  function V(x, y, z) { return new T.Vector3(x, y, z); }
+  var K = [
+    { p: V(-6,24,46), l: V(-2,1,-3) },
+    { p: V(24,10,28), l: V(12.6,2,11.4) },
+    { p: V(33,9,-26), l: V(21.4,2,-11.6) },
+    { p: V(-46,9,4), l: V(-32.2,2,-9.4) }
+  ];
+  var panels = [].slice.call(document.querySelectorAll('[data-cam]'));
+  var tags = [].slice.call(document.querySelectorAll('[data-tag]'));
+  var cp = K[0].p.clone(), cl = K[0].l.clone();
+  var tp = new T.Vector3(), tl = new T.Vector3(), off = new T.Vector3();
+  var UP = new T.Vector3(0, 1, 0);
+  var active = 0, first = true;
+
+  function size() {
+    var w = window.innerWidth, h = window.innerHeight;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    if (w >= 900) camera.setViewOffset(w, h, -w * 0.17, 0, w, h);
+    else camera.setViewOffset(w, h, 0, h * 0.14, w, h);
+    camera.updateProjectionMatrix();
+  }
+
+  function aim() {
+    var y = window.scrollY + window.innerHeight * 0.5;
+    var cs = panels.map(function (el) { var r = el.getBoundingClientRect(); return r.top + window.scrollY + r.height / 2; });
+    var i = 0;
+    while (i < cs.length - 1 && y >= cs[i + 1]) i++;
+    var u = 0;
+    if (i < cs.length - 1) u = Math.min(1, Math.max(0, (y - cs[i]) / (cs[i + 1] - cs[i])));
+    if (y < cs[0]) { i = 0; u = 0; }
+    var s = u * u * (3 - 2 * u);
+    var n = Math.min(i + 1, K.length - 1);
+    var a = Math.min(i, K.length - 1);
+    tp.lerpVectors(K[a].p, K[n].p, s);
+    tl.lerpVectors(K[a].l, K[n].l, s);
+    active = u < 0.5 ? a : n;
+  }
+
+  var v = new T.Vector3();
+  function draw(dt, t) {
+    aim();
+    var ar = window.innerWidth / window.innerHeight;
+    var kz = ar < 0.8 ? 1.8 : ar < 1.2 ? 1.3 : 1;
+    off.copy(tp).sub(tl).multiplyScalar(kz);
+    if (!reduce) off.applyAxisAngle(UP, Math.sin(t * 0.15) * 0.07);
+    tp.copy(tl).add(off);
+    if (first || reduce) { cp.copy(tp); cl.copy(tl); first = false; }
+    else { var d = 1 - Math.exp(-dt * 4); cp.lerp(tp, d); cl.lerp(tl, d); }
+    camera.position.copy(cp);
+    camera.lookAt(cl);
+
+    if (!reduce) {
+      nodes.forEach(function (nd) {
+        nd.wire.rotation.y = t * 0.6; nd.core.rotation.y = -t * 0.9;
+        nd.wire.position.y = nd.core.position.y = 3.2 + Math.sin(t * 1.2 + nd.phase * 6) * 0.25;
+        var f = (t * 0.45 + nd.phase) % 1;
+        nd.pulse.scale.setScalar(1 + f * 2.4);
+        nd.pulse.material.opacity = (1 - f) * 0.6;
+      });
+      arcs.forEach(function (a) { a.dot.position.copy(a.curve.getPoint((t * 0.1 + a.off) % 1)); });
+      for (var i = 0; i < N; i++) {
+        var yy = ppos[i * 3 + 1] + pspd[i] * dt;
+        ppos[i * 3 + 1] = yy > 36 ? 0 : yy;
+      }
+      pgeo.attributes.position.needsUpdate = true;
+    }
+    renderer.render(scene, camera);
+
+    var w = window.innerWidth, h = window.innerHeight;
+    tags.forEach(function (el, j) {
+      v.copy(nodes[j].group.position); v.y = 6.2; v.project(camera);
+      var visible = v.z < 1 && Math.abs(v.x) < 1.1 && Math.abs(v.y) < 1.1;
+      el.style.opacity = visible ? '1' : '0';
+      el.style.transform = 'translate(' + ((v.x * 0.5 + 0.5) * w) + 'px,' + ((-v.y * 0.5 + 0.5) * h) + 'px) translate(-50%,-100%)';
+      el.classList.toggle('on', active === j + 1);
+    });
+  }
+
+  size();
+  window.addEventListener('resize', function () { size(); if (reduce) draw(0, 0); });
+  if (reduce) {
+    window.addEventListener('scroll', function () { draw(0, 0); }, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { draw(0, 0); });
+    draw(0, 0);
+  } else {
+    var last = performance.now();
+    (function loop(now) {
+      var dt = Math.min(0.05, (now - last) / 1000); last = now;
+      draw(dt, now / 1000);
+      requestAnimationFrame(loop);
+    })(last);
+  }
+})();
+</script>
+
+</body>
+</html>

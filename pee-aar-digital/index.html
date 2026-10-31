@@ -169,6 +169,23 @@
   .ic-ctrl{min-height:53px}
 }
 @media(max-width:390px){.ic-phone{height:418px;width:208px}}
+
+.city-showcase{background:#111a1f;color:#f2f5f2;padding:clamp(42px,6vw,78px) var(--gutter);position:relative;overflow:hidden;}
+.city-showcase:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.2;background-image:linear-gradient(#79d6d516 1px,transparent 1px),linear-gradient(90deg,#79d6d516 1px,transparent 1px);background-size:37px 37px;transform:perspective(500px) rotateX(24deg) scale(1.15);}
+.city-showcase-inner{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,1.06fr);gap:clamp(25px,5vw,70px);align-items:center;}
+.city-eyebrow{font-size:10px;font-weight:800;letter-spacing:.24em;color:#87d9d8;display:flex;align-items:center;gap:12px}.city-eyebrow:before{content:"";height:7px;width:7px;background:#ffb23f;transform:rotate(45deg)}
+.city-showcase h2{font:800 clamp(34px,4.6vw,63px)/1.06 Manrope,Arial,sans-serif;letter-spacing:-.075em;max-width:620px;margin:19px 0 18px}.city-showcase h2 em{font-style:normal;color:#ffbf65}
+.city-lead{color:#bfcad0;max-width:490px;font-size:14px;line-height:1.7;margin:0 0 22px}.city-places{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 27px;padding:0;list-style:none}.city-places li{font:600 10px/1.2 'DM Sans',sans-serif;letter-spacing:.07em;border:1px solid #52646b;padding:9px 11px;color:#d9e5e7}
+.city-launch{appearance:none;display:inline-flex;align-items:center;gap:17px;padding:15px 18px;background:#ffb23f;border:1px solid #ffb23f;color:#0a1218;font-size:12px;line-height:1.3;font-weight:800;transition:transform .25s,background .25s}.city-launch:hover{background:#ffd286;transform:translateY(-2px)}
+.city-caption{display:block;margin:13px 0 0;font-size:11px;line-height:1.45;color:#90a7b1}.city-diagram{border:1px solid #394e5a;background:radial-gradient(ellipse at 60% 49%,#28404b,#122028 60%,#0c161b);min-height:315px;position:relative;display:grid;place-items:center;overflow:hidden}
+.city-diagram:after{content:'DIGITAL TERRITORY / 03';position:absolute;bottom:15px;left:17px;color:#90bac4;font:600 9px/1.2 'DM Sans',sans-serif;letter-spacing:.19em}.city-diagram svg{width:100%;height:auto;max-height:420px;display:block;filter:drop-shadow(0 0 14px #3bc3c52e)}
+.city-modal{position:fixed;inset:0;z-index:1200;background:#081116;display:flex;flex-direction:column}.city-modal[hidden]{display:none!important}
+.city-modal-top{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#0a1218;color:#eff6f5;border-bottom:1px solid #2d424f;padding:11px clamp(16px,3vw,36px);min-height:63px;flex:none}
+.city-modal-title{font:800 12px/1.35 'Manrope',sans-serif;letter-spacing:.12em;text-transform:uppercase}.city-modal-hint{color:#a4bac3;font:500 10px/1.4 'DM Sans',sans-serif;display:block;margin-top:3px}
+.city-modal-close{background:#e8f0ed;color:#142026;border:0;padding:11px 15px;font:800 12px/1 'DM Sans',sans-serif}.city-modal-frame{border:0;width:100%;flex:1;min-height:0;background:#0a1218}body.city-modal-open{overflow:hidden}
+@media(max-width:850px){.city-showcase-inner{grid-template-columns:1fr;gap:26px}.city-diagram{min-height:220px}.city-showcase{padding:42px var(--gutter) 49px}}
+@media(max-width:420px){.city-diagram{min-height:190px}.city-showcase h2{font-size:clamp(33px,10vw,45px)}.city-launch{width:100%;justify-content:center}.city-modal-title{font-size:10px}.city-modal-hint{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.city-launch{transition:none}}
 </style>
 </head>
 <body>
@@ -176,7 +193,7 @@
   <header class="site-head">
     <a class="brand" href="#top" aria-label="PEE AAR DIGITAL home"><strong>PEE AAR DIGITAL</strong><span>PRAKASH RAVIKUMAR</span></a>
     <nav class="nav" id="nav-links" aria-label="Main navigation">
-      <a href="#work">Work</a><a href="#experience">Experience</a><a href="#services">Services</a><a href="#about">About</a><a href="#contact">Contact</a>
+      <a href="#work">Work</a><a href="#experience">Experience</a><a href="#cities">3D Cities</a><a href="#services">Services</a><a href="#about">About</a><a href="#contact">Contact</a>
     </nav>
     <button type="button" class="btn btn-black head-action" data-audit>Review Your Website for Free <span class="btn-arrow" aria-hidden="true">↗</span></button>
     <button class="hamburger" aria-label="Open menu" aria-controls="nav-links" aria-expanded="false"><span></span></button>
@@ -300,7 +317,7 @@
       <div class="ic-foot"><strong>THE CUSTOMER JOURNEY</strong><span>Help visitors find you, trust you, and contact you.</span><span>CONCEPT BY PEE AAR DIGITAL</span></div>
     </section>
 
-    <section class="section-pad" id="services">
+    <section class="city-showcase" id="cities" aria-labelledby="city-title"><div class="city-showcase-inner"><div><div class="city-eyebrow">AN INTERACTIVE WORLD</div><h2 id="city-title">Three cities.<br><em>One creative mind.</em></h2><p class="city-lead">Pondicherry is home. Chennai and Bengaluru keep me exploring. Take a 3D journey through the places shaping my design and digital marketing work.</p><ul class="city-places"><li>PONDICHERRY</li><li>CHENNAI</li><li>BENGALURU</li></ul><button class="city-launch" data-city-open aria-haspopup="dialog" aria-controls="city-modal" type="button">Explore my 3D city map ↗</button><span class="city-caption">Scroll-driven experience · No sign-up · Works on mobile</span></div><div class="city-diagram"><svg viewBox="0 0 560 430" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs><pattern id="cgrid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#4f7782" opacity=".3"/></pattern></defs><rect width="560" height="430" fill="url(#cgrid)"/><g fill="none" stroke="#43d1dc"><path d="M395 0Q415 110 450 200T475 430" opacity=".3"/><path d="M415 0Q435 110 470 200T495 430" opacity=".17"/><path d="M152 141Q286 65 397 128Q460 213 382 308Q230 332 152 141" stroke-dasharray="6 7" stroke-width="2" opacity=".75"/></g><g fill="#ffb23f"><circle cx="152" cy="141" r="8"/><circle cx="382" cy="308" r="8"/></g><circle fill="#43d1dc" cx="397" cy="128" r="8"/><g fill="none" stroke="#ffb23f" opacity=".65"><circle cx="152" cy="141" r="22"/><circle cx="382" cy="308" r="22"/></g><circle cx="397" cy="128" r="22" stroke="#43d1dc" stroke-opacity=".65" fill="none"/><g fill="#d9e4ea" font-family="sans-serif" font-size="13" font-weight="700" letter-spacing="1"><text x="94" y="105">BENGALURU</text><text x="414" y="108">CHENNAI</text><text x="384" y="349">PONDICHERRY</text></g></svg></div></div></section><section class="section-pad" id="services">
       <div class="sec-line"><div><div class="micro">SERVICES</div><h2 class="section-headline" style="margin-bottom:0">From strategy to growth.</h2></div><a class="link-text" href="#contact">Explore All Services <span aria-hidden="true">→</span></a></div>
       <div class="services-grid">
         <article class="service reveal"><span class="n">01</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3.5" width="20" height="14" rx="1"/><path d="M8 21h8m-4-3.5V21"/></svg><h3>Website Design</h3><p>Professional, mobile-first websites designed to encourage enquiries.</p></article>
@@ -517,5 +534,5 @@
   })();
 </script>
 
-</body>
+<div id="city-modal" class="city-modal" role="dialog" aria-modal="true" aria-labelledby="city-modal-title" hidden><div class="city-modal-top"><div><div class="city-modal-title" id="city-modal-title">PEE AAR DIGITAL / CITY JOURNEY</div><span class="city-modal-hint">Scroll to explore the three cities</span></div><button class="city-modal-close" type="button" data-city-close>✕ Close</button></div><iframe class="city-modal-frame" id="city-modal-frame" src="about:blank" title="Animated 3D map of three cities"></iframe></div><script>(function(){const opener=document.querySelector('[data-city-open]'),modal=document.getElementById('city-modal'),closer=document.querySelector('[data-city-close]'),frame=document.getElementById('city-modal-frame');if(!opener||!modal||!closer||!frame)return;let previous=null;function close(){if(modal.hidden)return;modal.hidden=true;document.body.classList.remove('city-modal-open');frame.src='about:blank';if(previous&&previous.isConnected)previous.focus();}opener.addEventListener('click',function(){previous=document.activeElement;frame.src='city-journey.html';modal.hidden=false;document.body.classList.add('city-modal-open');closer.focus();});closer.addEventListener('click',close);document.addEventListener('keydown',function(e){if(!modal.hidden&&e.key==='Escape'){e.preventDefault();close();}});})();</script></body>
 </html>
